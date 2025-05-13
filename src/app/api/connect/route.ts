@@ -9,13 +9,15 @@ export async function POST(req: Request) {
   const { username } = await req.json();
 
   // Connect to the chat (await can be used as well)
-  await tiktokLive
+  tiktokLive
     .connect(username)
     .connect()
     .then((state) => {
       console.info(`Connected to roomId ${state.roomId}`);
 
-      io.socketsJoin(state.roomId);
+      io.on("connection", (socket) => {
+        socket.join(state.roomId);
+      });
     })
     .catch((err) => {
       console.error("Failed to connect", err);
@@ -23,15 +25,16 @@ export async function POST(req: Request) {
       throw NextResponse.json({ status: 500, message: "Error" });
     });
 
-  const roomId = await tiktokLive.instance().fetchRoomId();
+  // const roomId = await tiktokLive.instance().fetchRoomId();
 
   // Define the events that you want to handle
   // In this case we listen to chat messages (comments)
+
   tiktokLive.instance().on(WebcastEvent.CHAT, (data) => {
     console.log(
       `msgId: ${data.event?.msgId} - ${data?.user?.uniqueId} (userId:${data?.user?.uniqueId}) writes: ${data.comment}`
     );
-    io.to(roomId).emit("chat", {
+    io.emit("chat", {
       user: {
         username: data?.user?.nickname,
         userId: data?.user?.userId,
@@ -47,7 +50,7 @@ export async function POST(req: Request) {
     console.log(
       `${data?.user?.uniqueId} (userId:${data?.user?.userId}) sends ${data.giftId}`
     );
-    io.to(roomId).emit("gifts", {
+    io.emit("gifts", {
       user: {
         username: data?.user?.nickname,
         userId: data?.user?.userId,
@@ -64,7 +67,7 @@ export async function POST(req: Request) {
   });
 
   tiktokLive.instance().on(WebcastEvent.LIKE, (data) => {
-    io.to(roomId).emit("likes", {
+    io.emit("likes", {
       user: {
         username: data?.user?.nickname,
         userId: data?.user?.userId,

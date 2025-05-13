@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { Socket } from "socket.io-client";
 
@@ -14,6 +14,8 @@ const Gifts = ({
   setGifts: React.Dispatch<React.SetStateAction<GiftsType[]>>;
   gifts: GiftsType[];
 }) => {
+  const scrollableDivRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     if (socket) {
       socket.on("gifts", (gift: GiftsType) => {
@@ -28,6 +30,13 @@ const Gifts = ({
     }
   }, [gifts, socket, setGifts]);
 
+  useEffect(() => {
+    if (scrollableDivRef.current) {
+      scrollableDivRef.current.scrollTop =
+        scrollableDivRef.current.scrollHeight;
+    }
+  }, [gifts]); // Trigger when 'data' changes
+
   return (
     <div className="chat-container flex flex-col mt-4">
       <div className="w-full border-y-1">
@@ -35,10 +44,13 @@ const Gifts = ({
           <b>Gifts</b>
         </h2>
       </div>
-      <div className="chat-messages w-full h-[10vh] overflow-scroll">
+      <div className="chat-messages w-full h-[10vh]">
         {gifts.map((gift: GiftsType, index: number) => (
           <div key={index} className="message">
-            <span>
+            <div
+              ref={scrollableDivRef}
+              className="w-full flex flex-col overflow-auto"
+            >
               {gift.gift && (
                 <div className="flex w-full items-center gap-2 mt-2">
                   <Image
@@ -57,7 +69,7 @@ const Gifts = ({
                   </p>
                 </div>
               )}
-            </span>
+            </div>
           </div>
         ))}
       </div>

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Socket } from "socket.io-client";
 
 export default function TikTokChat({
@@ -13,6 +13,8 @@ export default function TikTokChat({
   setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
   messages: ChatMessage[];
 }) {
+  const scrollableDivRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     if (socket) {
       socket.on("chat", (msg: ChatMessage) => {
@@ -30,6 +32,13 @@ export default function TikTokChat({
     }
   }, [messages, socket, setMessages]);
 
+  useEffect(() => {
+    if (scrollableDivRef.current) {
+      scrollableDivRef.current.scrollTop =
+        scrollableDivRef.current.scrollHeight;
+    }
+  }, [messages]); // Trigger when 'data' changes
+
   return (
     <div className="chat-container flex flex-col">
       <div className="w-full  border-y-1">
@@ -37,8 +46,11 @@ export default function TikTokChat({
           <b>Chat</b>
         </h2>
       </div>
-      <div className="chat-messages w-full h-[50vh] overflow-auto flex">
-        <div className="w-full">
+      <div className="chat-messages w-full h-[50vh] flex">
+        <div
+          ref={scrollableDivRef}
+          className="w-full flex flex-col overflow-auto"
+        >
           {messages.map((msg, index) => (
             <div key={index} className="message">
               {msg.user && (

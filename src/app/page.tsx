@@ -53,9 +53,9 @@ export default function Home() {
 
     setSocket(socketInstance);
 
-    return () => {
-      socketInstance.disconnect();
-    };
+    // return () => {
+    //   socketInstance.disconnect();
+    // };
   }, []);
 
   return (

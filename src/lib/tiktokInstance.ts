@@ -10,6 +10,7 @@ export const tiktokLive = {
     // Create new connection
     currentConnection = new TikTokLiveConnection(username, {
       signApiKey: process.env.TIKTOK_API_KEY,
+      requestPollingIntervalMs: 100,
     });
 
     return currentConnection;
