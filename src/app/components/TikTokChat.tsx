@@ -1,0 +1,79 @@
+import Image from "next/image";
+import { useEffect } from "react";
+import { Socket } from "socket.io-client";
+
+export default function TikTokChat({
+  socket,
+  textSize,
+  setMessages,
+  messages,
+}: {
+  socket: Socket;
+  textSize: number;
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
+  messages: ChatMessage[];
+}) {
+  useEffect(() => {
+    if (socket) {
+      socket.on("chat", (msg: ChatMessage) => {
+        if (!messages.length) {
+          setMessages([msg]);
+        } else if (messages[messages.length - 1].msgId != msg.msgId) {
+          setMessages([...messages, msg]);
+        }
+
+        localStorage.setItem(
+          "chat_history",
+          JSON.stringify([...messages, msg])
+        );
+      });
+    }
+  }, [messages, socket, setMessages]);
+
+  return (
+    <div className="chat-container flex flex-col">
+      <div className="w-full  border-y-1">
+        <h2 style={{ fontSize: `${textSize + 8}px` }}>
+          <b>Chat</b>
+        </h2>
+      </div>
+      <div className="chat-messages w-full h-[50vh] overflow-auto flex">
+        <div className="w-full">
+          {messages.map((msg, index) => (
+            <div key={index} className="message">
+              {msg.user && (
+                <div className="flex w-full items-center gap-2 mt-2">
+                  <Image
+                    src={msg.user.profilePic}
+                    width={(textSize - 2) * 2}
+                    height={textSize}
+                    alt=""
+                    className="rounded-full"
+                  />
+                  <p style={{ fontSize: `${textSize}px` }}>
+                    <strong className={"text-blue-500"}>
+                      {msg.user?.username}{" "}
+                      {msg.user.badges?.map((badge, index) => {
+                        return (
+                          <Image
+                            src={badge.url as string}
+                            alt="badge"
+                            width={textSize}
+                            height={textSize}
+                            key={index}
+                          />
+                        );
+                      })}
+                      :
+                    </strong>{" "}
+                    {msg.comment}
+                  </p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
