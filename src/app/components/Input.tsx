@@ -30,6 +30,14 @@ const Input = ({
     localStorage.setItem("username", username);
     if (res.status == 200) {
       setIsConnected(true);
+      setMessages([
+        {
+          type: "message",
+          user: { username: "System", userId: "0", profilePic: "", badges: [] },
+          comment: `Now connected to ${username}'s `,
+          msgId: "0",
+        },
+      ]);
     }
   };
 
@@ -43,7 +51,7 @@ const Input = ({
     }
   };
 
-  const buttonStyle = "px-8 py-2 mx-2 rounded-full text-black";
+  const buttonStyle = "px-8 max-sm:px-3 py-2 mx-2 rounded-full text-black";
 
   return (
     <div className="connection-form mb-4">
@@ -54,6 +62,7 @@ const Input = ({
           onChange={(e) => setUsername(e.target.value)}
           placeholder="TikTok username"
           disabled={isConnected}
+          className="lg:w-[200px] max-sm:w-28"
         />
         <button
           onClick={connectHandler}

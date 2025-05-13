@@ -44,32 +44,30 @@ const Gifts = ({
           <b>Gifts</b>
         </h2>
       </div>
-      <div className="chat-messages w-full h-[10vh]">
+      <div
+        ref={scrollableDivRef}
+        className="chat-messages w-full h-[10vh] overflow-scroll"
+      >
         {gifts.map((gift: GiftsType, index: number) => (
           <div key={index} className="message">
-            <div
-              ref={scrollableDivRef}
-              className="w-full flex flex-col overflow-auto"
-            >
-              {gift.gift && (
-                <div className="flex w-full items-center gap-2 mt-2">
-                  <Image
-                    src={gift.user.profilePic}
-                    width={(textSize - 2) * 2}
-                    height={textSize}
-                    alt=""
-                    className="rounded-full"
-                  />
-                  <p style={{ fontSize: `${textSize}px` }}>
-                    <strong>{gift.user?.username}</strong> sent a gift:{" "}
-                    {gift.gift.name}
-                    {gift.gift.count && ` (x${gift.gift.count})`}
-                    {gift.gift.diamondCount &&
-                      ` (${gift.gift.diamondCount} diamonds)`}
-                  </p>
-                </div>
-              )}
-            </div>
+            {gift.gift && (
+              <div className="flex w-full items-center gap-2 mt-2">
+                <Image
+                  src={gift.user.profilePic}
+                  width={(textSize - 2) * 2}
+                  height={textSize}
+                  alt=""
+                  className="rounded-full"
+                />
+                <p style={{ fontSize: `${textSize}px` }}>
+                  <strong>{gift.user?.username}</strong> sent a gift:{" "}
+                  {gift.gift.name}
+                  {gift.gift.count && ` (x${gift.gift.count})`}
+                  {gift.gift.diamondCount &&
+                    ` (${gift.gift.diamondCount} diamonds)`}
+                </p>
+              </div>
+            )}
           </div>
         ))}
       </div>

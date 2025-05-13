@@ -10,7 +10,7 @@ export async function POST(req: Request) {
 
   // Connect to the chat (await can be used as well)
   tiktokLive
-    .connect(username)
+    .connect(username.toLowercase())
     .connect()
     .then((state) => {
       console.info(`Connected to roomId ${state.roomId}`);

@@ -53,13 +53,13 @@ export default function Home() {
 
     setSocket(socketInstance);
 
-    // return () => {
-    //   socketInstance.disconnect();
-    // };
-  }, []);
+    return () => {
+      socketInstance.disconnect();
+    };
+  }, []); //eslint-disable-line
 
   return (
-    <div className="p-20 w-screen justify-center items-center">
+    <div className="lg:p-20 p-4 w-screen justify-center items-center">
       <main className="">
         <Input
           setTextSize={setTextSize}
