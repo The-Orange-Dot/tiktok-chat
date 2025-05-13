@@ -34,12 +34,13 @@ export default function Home() {
         }
 
         const storedMessages = localStorage.getItem("chat_history");
-        if (storedMessages && storedUserName == username) {
+
+        if (storedMessages) {
           setMessages(JSON.parse(storedMessages));
         }
 
         const storedGifts = localStorage.getItem("gifts_history");
-        if (storedGifts && storedUserName == username) {
+        if (storedGifts) {
           setGifts(JSON.parse(storedGifts));
         }
       } else {
@@ -56,7 +57,7 @@ export default function Home() {
     return () => {
       socketInstance.disconnect();
     };
-  }, []); //eslint-disable-line
+  }, []);
 
   return (
     <div className="lg:p-20 p-4 w-screen justify-center items-center">
@@ -64,7 +65,6 @@ export default function Home() {
         <Input
           setTextSize={setTextSize}
           textSize={textSize}
-          socket={socket as Socket}
           isConnected={isConnected}
           setIsConnected={setIsConnected}
           username={username}

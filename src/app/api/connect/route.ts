@@ -10,14 +10,12 @@ export async function POST(req: Request) {
 
   // Connect to the chat (await can be used as well)
   tiktokLive
-    .connect(username.toLowercase())
+    .connect(username)
     .connect()
     .then((state) => {
       console.info(`Connected to roomId ${state.roomId}`);
 
-      io.on("connection", (socket) => {
-        socket.join(state.roomId);
-      });
+      io.connect(state.roomId);
     })
     .catch((err) => {
       console.error("Failed to connect", err);
@@ -34,7 +32,7 @@ export async function POST(req: Request) {
     console.log(
       `msgId: ${data.event?.msgId} - ${data?.user?.uniqueId} (userId:${data?.user?.uniqueId}) writes: ${data.comment}`
     );
-    io.emit("chat", {
+    io.instance()?.emit("chat", {
       user: {
         username: data?.user?.nickname,
         userId: data?.user?.userId,
@@ -50,7 +48,7 @@ export async function POST(req: Request) {
     console.log(
       `${data?.user?.uniqueId} (userId:${data?.user?.userId}) sends ${data.giftId}`
     );
-    io.emit("gifts", {
+    io.instance()?.emit("gifts", {
       user: {
         username: data?.user?.nickname,
         userId: data?.user?.userId,
@@ -67,7 +65,7 @@ export async function POST(req: Request) {
   });
 
   tiktokLive.instance().on(WebcastEvent.LIKE, (data) => {
-    io.emit("likes", {
+    io.instance()?.emit("likes", {
       user: {
         username: data?.user?.nickname,
         userId: data?.user?.userId,

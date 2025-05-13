@@ -16,10 +16,10 @@ const Likes = ({ socket, textSize }: { socket: Socket; textSize: number }) => {
       <div className="w-screen fixed bottom-0 flex justify-center">
         <Image
           src={like?.user.profilePic}
-          width={(textSize - 4) * 2}
-          height={textSize - 4}
+          width={textSize * 2}
+          height={textSize}
           alt=""
-          className="rounded-full mr-2"
+          className={`rounded-full w-[${textSize}px] h-[${textSize}px] mr-2`}
         />
         <div className="flex items-center">
           <p style={{ fontSize: `${textSize}px` }}>

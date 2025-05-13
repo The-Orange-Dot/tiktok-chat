@@ -40,8 +40,8 @@ const Gifts = ({
   return (
     <div className="chat-container flex flex-col mt-4">
       <div className="w-full border-y-1">
-        <h2 style={{ fontSize: `${textSize + 8}px` }}>
-          <b>Gifts</b>
+        <h2 style={{ fontSize: `${textSize + 8}px`, fontWeight: 800 }}>
+          Gifts
         </h2>
       </div>
       <div
@@ -49,15 +49,15 @@ const Gifts = ({
         className="chat-messages w-full h-[10vh] overflow-scroll"
       >
         {gifts.map((gift: GiftsType, index: number) => (
-          <div key={index} className="message">
+          <div key={index} className="gifts">
             {gift.gift && (
               <div className="flex w-full items-center gap-2 mt-2">
                 <Image
                   src={gift.user.profilePic}
-                  width={(textSize - 2) * 2}
-                  height={textSize}
+                  width={textSize * 2}
+                  height={textSize * 2}
                   alt=""
-                  className="rounded-full"
+                  className={`rounded-full w-[${textSize}px] h-[${textSize}px]`}
                 />
                 <p style={{ fontSize: `${textSize}px` }}>
                   <strong>{gift.user?.username}</strong> sent a gift:{" "}

@@ -42,9 +42,7 @@ export default function TikTokChat({
   return (
     <div className="chat-container flex flex-col">
       <div className="w-full  border-y-1">
-        <h2 style={{ fontSize: `${textSize + 8}px` }}>
-          <b>Chat</b>
-        </h2>
+        <h2 style={{ fontSize: `${textSize + 8}px`, fontWeight: 800 }}>Chat</h2>
       </div>
       <div className="chat-messages w-full h-[50vh] flex">
         <div
@@ -57,26 +55,14 @@ export default function TikTokChat({
                 <div className="flex w-full items-center gap-2 mt-2">
                   <Image
                     src={msg.user.profilePic}
-                    width={(textSize - 2) * 2}
-                    height={textSize}
+                    width={textSize * 2}
+                    height={textSize * 2}
                     alt=""
-                    className="rounded-full"
+                    className={`rounded-full w-[${textSize}px] h-[${textSize}px]`}
                   />
                   <p style={{ fontSize: `${textSize}px` }}>
                     <strong className={"text-blue-500"}>
-                      {msg.user?.username}{" "}
-                      {msg.user.badges?.map((badge, index) => {
-                        return (
-                          <Image
-                            src={badge.url as string}
-                            alt="badge"
-                            width={textSize}
-                            height={textSize}
-                            key={index}
-                          />
-                        );
-                      })}
-                      :
+                      {msg.user?.username} :
                     </strong>{" "}
                     {msg.comment}
                   </p>
